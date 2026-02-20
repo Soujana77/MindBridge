@@ -56,7 +56,7 @@ const AppContent = () => {
     <div className="flex min-h-screen bg-slate-50">
 
       {/* Sidebar */}
-      {activePage !== "AUTH" && activePage !== "SIGNUP" && <Sidebar />}
+      {!["AUTH","SIGNUP","BREATHE"].includes(activePage) && <Sidebar />}
 
       {/* Main Content */}
       <main
