@@ -76,5 +76,4 @@ export type PageView =
   | "SLEEP"
   | "PEER"
   | "COUNSELING"
-  | "ADMIN";
-   "GAMES";
+  | "GAMES";

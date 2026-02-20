@@ -15,7 +15,6 @@ import Pomodoro from "./pages/Pomodoro";
 import Sleep from "./pages/Sleep";
 import Forum from "./pages/Forum";
 import Booking from "./pages/Booking";
-import Admin from "./pages/Admin";
 
 
 const AppContent = () => {
@@ -46,7 +45,7 @@ const AppContent = () => {
       case "SLEEP": return <Sleep />;
       case "PEER": return <Forum />;
       case "COUNSELING": return <Booking />;
-      case "ADMIN": return <Admin />;
+      /* Admin page removed */
       case "GAMES": return <Games />; 
       default: return <Dashboard />;
     }
