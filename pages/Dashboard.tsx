@@ -1,0 +1,195 @@
+import React, { useEffect } from 'react';
+import { useApp } from '../context/AppContext';
+import { PetDisplay } from '../components/PetDisplay';
+import { Play, Activity, Coffee, Moon } from 'lucide-react';
+
+const Dashboard = () => {
+  const hasNotified = React.useRef(false);
+  const { user, setActivePage, updateMood, addNotification, notifications } = useApp();
+
+  // 🌸 EXAM REMINDER
+ useEffect(() => {
+
+  if (hasNotified.current) return; // 🚫 prevents duplicate
+  hasNotified.current = true;
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const exam = new Date("2026-02-20");
+  exam.setHours(0,0,0,0);
+
+  const diffTime = exam.getTime() - today.getTime();
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  if (diffDays === 3) {
+    addNotification("📚 Your exam is in 3 days — Stay calm 💜");
+  }
+
+  if (diffDays === 1) {
+    addNotification("🔥 Exam tomorrow! Believe in yourself ✨");
+  }
+
+}, [addNotification]);
+
+
+
+  return (
+    <div className="p-6 space-y-6 pb-24 md:pb-6 w-full">
+      {/* 🔔 Notifications */}
+        <div className="fixed top-6 right-6 space-y-2 z-50">
+  {notifications.map((note, index) => (
+    <div
+      key={index}
+      className="bg-indigo-500 text-white px-4 py-3 rounded-xl shadow-lg animate-bounce"
+    >
+      {note}
+    </div>
+  ))}
+</div>
+      {/* HEADER */}
+      <header className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-bold text-slate-800">Hi, {user.name}</h2>
+          <p className="text-slate-500">Ready for a mindful day?</p>
+        </div>
+
+        <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-100 flex items-center gap-2">
+          <span>🔥</span>
+          <span className="font-bold text-slate-700">Day Streak</span>
+        </div>
+      </header>
+
+      {/* GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+        {/* LEFT COLUMN */}
+        <div className="space-y-6">
+
+          {/* DAILY MOOD QUEST */}
+          <section className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100
+          transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+            <h3 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
+              <Activity className="text-indigo-500" size={20}/> Daily Mood Quest
+            </h3>
+
+            <div className="flex justify-between gap-2">
+              {[1,2,3,4,5].map((level) => (
+                <button
+                  key={level}
+                  onClick={() => updateMood(level)}
+                  className="w-12 h-12 rounded-2xl bg-slate-50 hover:bg-indigo-100 transition text-xl flex items-center justify-center border border-slate-200"
+                >
+                  {['😢','😕','😐','🙂','😄'][level-1]}
+                </button>
+              ))}
+            </div>
+
+            <p className="text-xs text-slate-400 mt-3 text-center">
+              Check in to earn 20 XP
+            </p>
+          </section>
+
+          {/* PET */}
+          <section className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100
+          transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <PetDisplay />
+          </section>
+
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="lg:col-span-3 space-y-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            {/* BREATHING */}
+            <div
+              onClick={() => setActivePage('BREATHE')}
+              className="bg-gradient-to-br from-teal-400 to-emerald-500 p-6 rounded-3xl shadow-lg cursor-pointer text-white
+              transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+            >
+              <h3 className="font-bold text-xl mb-1">60s Reset</h3>
+              <p className="text-emerald-50 text-sm">Take a quick breath.</p>
+
+              <div className="mt-4 bg-white/20 w-10 h-10 rounded-full flex items-center justify-center">
+                <Play size={20} fill="white" />
+              </div>
+            </div>
+
+            {/* FOCUS TIMER */}
+            <div
+              onClick={() => setActivePage('FOCUS')}
+              className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 cursor-pointer
+              transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div className="p-3 bg-indigo-50 text-indigo-500 rounded-2xl">
+                  <Coffee size={24} />
+                </div>
+                <span className="bg-slate-100 text-xs px-2 py-1 rounded-full">25 min</span>
+              </div>
+
+              <h3 className="font-bold text-lg text-slate-800">Deep Focus</h3>
+              <p className="text-slate-400 text-sm">Start a Pomodoro session.</p>
+            </div>
+
+            {/* JOURNAL */}
+            <div
+              onClick={() => setActivePage('JOURNAL')}
+              className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 cursor-pointer
+              transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            >
+              <div className="p-3 bg-pink-50 text-pink-500 rounded-2xl mb-4">
+                <Activity size={24} />
+              </div>
+
+              <h3 className="font-bold text-lg text-slate-800">Mood Journal</h3>
+              <p className="text-slate-400 text-sm">Reflect on your day.</p>
+            </div>
+
+            {/* SLEEP */}
+            <div
+              onClick={() => setActivePage('SLEEP')}
+              className="bg-slate-800 text-white p-6 rounded-3xl shadow-lg cursor-pointer
+              transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+            >
+              <div className="flex justify-between mb-2">
+                <Moon size={24} />
+                <span className="text-xs">Coach</span>
+              </div>
+
+              <h3 className="font-bold text-lg">Sleep Hygiene</h3>
+              <p className="text-slate-400 text-sm">Track your rest.</p>
+            </div>
+
+          </div>
+
+          {/* PROGRESS */}
+          <section className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100
+          transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+            <h3 className="font-bold text-slate-700 mb-4">Your Progress</h3>
+
+            <div className="w-full bg-slate-200 h-3 rounded-full overflow-hidden mb-2">
+              <div
+                className="bg-indigo-500 h-full rounded-full"
+                style={{ width: `${(user.xp % 100)}%` }}
+              />
+            </div>
+
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
+              <span>Level {user.level}</span>
+              <span>{user.xp} XP / {user.xp + 100} XP</span>
+            </div>
+
+          </section>
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
