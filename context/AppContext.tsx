@@ -24,7 +24,7 @@ export type PageView =
   | "SLEEP"
   | "PEER"
   | "COUNSELING"
-  | "ADMIN";
+  | "GAMES";
 
 export interface Achievement {
   id: string;

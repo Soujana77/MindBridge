@@ -6,7 +6,6 @@ import {
   Wind,
   Users,
   Calendar,
-  LayoutDashboard,
   Moon,
   Clock,
   LogOut,
@@ -64,7 +63,6 @@ export const Sidebar = () => {
         <NavItem page="SLEEP" icon={Moon} label="Sleep Coach" />
         <NavItem page="PEER" icon={Users} label="Peer Support" />
         <NavItem page="COUNSELING" icon={Calendar} label="Counseling" />
-        <NavItem page="ADMIN" icon={LayoutDashboard} label="Admin" />
         <NavItem page="GAMES" icon={Gamepad2} label="Stress Relief Games" />
       </nav>
 
