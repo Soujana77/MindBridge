@@ -7,7 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import Signup from "./pages/Signup";
-
+import Games from "./pages/Games";
 import Chatbot from "./pages/Chatbot";
 import Journal from "./pages/Journal";
 import Breathing from "./pages/Breathing";
@@ -47,7 +47,7 @@ const AppContent = () => {
       case "PEER": return <Forum />;
       case "COUNSELING": return <Booking />;
       case "ADMIN": return <Admin />;
-
+      case "GAMES": return <Games />; 
       default: return <Dashboard />;
     }
   };

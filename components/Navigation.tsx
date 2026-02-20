@@ -9,7 +9,8 @@ import {
   LayoutDashboard,
   Moon,
   Clock,
-  LogOut
+  LogOut,
+  Gamepad2
 } from 'lucide-react';
 
 import { useApp } from '../context/AppContext';
@@ -64,7 +65,7 @@ export const Sidebar = () => {
         <NavItem page="PEER" icon={Users} label="Peer Support" />
         <NavItem page="COUNSELING" icon={Calendar} label="Counseling" />
         <NavItem page="ADMIN" icon={LayoutDashboard} label="Admin" />
-
+        <NavItem page="GAMES" icon={Gamepad2} label="Stress Relief Games" />
       </nav>
 
       {/* PROFILE */}
