@@ -16,13 +16,7 @@ const GameLayout = ({ title, description, children }: GameLayoutProps) => {
 
       <div className="container max-w-4xl mx-auto px-4 py-6">
 
-        <button
-          onClick={() => setActivePage("GAMES")}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 group"
-        >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="font-body font-medium">Back to Games</span>
-        </button>
+        
 
         <div className="text-center mb-8 animate-fade-up">
 
