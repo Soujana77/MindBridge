@@ -101,7 +101,7 @@ const Signup = ({ onSuccess }: any) => {
 
     alert("Account created successfully 💜");
 
-    if (onSuccess) onSuccess();
+    if (onSuccess) onSuccess(); // ⬅️ go back to Login
   };
 
   return (
@@ -200,6 +200,20 @@ const Signup = ({ onSuccess }: any) => {
         >
           Create Account
         </button>
+
+        {/* 🔁 Back to Login */}
+        <p className="text-sm text-center text-slate-500 mt-3">
+          Already have an account?{" "}
+          <button
+            type="button"
+            onClick={() => {
+              if (onSuccess) onSuccess();
+            }}
+            className="text-indigo-600 hover:underline font-medium"
+          >
+            Log in
+          </button>
+        </p>
 
       </div>
     </div>
