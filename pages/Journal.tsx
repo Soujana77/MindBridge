@@ -7,6 +7,7 @@ import { JournalEntry } from '../types';
 
 const Journal = () => {
   const { user, addXP, addNotification } = useApp();
+
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [content, setContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -21,12 +22,13 @@ const Journal = () => {
       setIsLoading(false);
       return;
     }
+
     const { data, error } = await supabase
       .from('journal_entries')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
-    
+
     if (data && !error) setEntries(data);
     setIsLoading(false);
   };
@@ -36,38 +38,23 @@ const Journal = () => {
     setIsSaving(true);
 
     try {
-      // 1. Analyze with Gemini
       const analysis = await analyzeJournalSentiment(content);
 
-      // 2. Save to Supabase
       if (supabase) {
-        const { data, error } = await supabase.from('journal_entries').insert({
+        const { data } = await supabase.from('journal_entries').insert({
           user_id: user.id,
-          content: content,
+          content,
           mood_sentiment: analysis.sentiment,
           ai_suggestion: analysis.suggestion
         }).select();
 
-        if (data && !error) {
-           setEntries([data[0], ...entries]);
-        }
-      } else {
-        // Demo mode local push
-        const mockEntry: JournalEntry = {
-          id: Date.now(),
-          content,
-          mood_sentiment: analysis.sentiment,
-          ai_suggestion: analysis.suggestion,
-          created_at: new Date().toISOString()
-        };
-        setEntries([mockEntry, ...entries]);
+        if (data) setEntries([data[0], ...entries]);
       }
 
       addXP(30);
-      addNotification("Journal saved + AI Insights generated!");
+      addNotification("Journal saved ✨");
       setContent('');
     } catch (err) {
-      console.error(err);
       addNotification("Error saving journal.");
     } finally {
       setIsSaving(false);
@@ -75,75 +62,87 @@ const Journal = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto h-full flex flex-col pb-24 md:pb-6">
+    <div className="p-6 max-w-4xl mx-auto pb-24 md:pb-6">
+
+      {/* HEADER */}
       <header className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-          <PenTool className="text-pink-500" /> Mood Journal
+        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
+          <PenTool className="text-purple-500" /> Mood Journal
         </h2>
-        <p className="text-slate-500">Write freely. Let AI help you reflect.</p>
+        <p className="text-slate-500">Express freely. Heal gently 💜</p>
       </header>
 
-      {/* Editor */}
-      <div className="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 mb-8">
+      {/* ✨ WRITING SECTION */}
+      <div className="relative bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6 rounded-3xl shadow-xl border border-white/40 backdrop-blur-xl">
+
+        {/* Floating sparkles */}
+        <Sparkles className="absolute top-4 right-4 text-purple-300 animate-pulse" />
+
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="What's on your mind today? (e.g., 'I felt overwhelmed by exams...')"
-          className="w-full h-32 p-4 bg-slate-50 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-pink-200 text-slate-700"
+          placeholder="Write what's in your heart..."
+          className="w-full h-40 p-6 bg-white/70 backdrop-blur rounded-2xl resize-none focus:outline-none focus:ring-4 focus:ring-purple-200 text-slate-700 text-lg shadow-inner transition-all"
         />
+
+        {/* SAVE BUTTON */}
         <div className="flex justify-end mt-4">
           <button
             onClick={handleSave}
             disabled={isSaving || !content.trim()}
-            className="bg-pink-500 text-white px-6 py-2 rounded-xl hover:bg-pink-600 transition-colors flex items-center gap-2 disabled:opacity-50"
+            className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-8 py-3 rounded-2xl shadow-lg hover:scale-105 transition-all flex items-center gap-2 disabled:opacity-50"
           >
-            {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+            {isSaving
+              ? <Loader2 className="animate-spin" size={20} />
+              : <Save size={20} />}
             Save Entry
           </button>
         </div>
       </div>
 
-      {/* History */}
-      <h3 className="font-bold text-slate-700 mb-4">Previous Entries</h3>
-      <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+      {/* HISTORY */}
+      <h3 className="font-bold text-slate-700 mt-8 mb-4">Your Reflections</h3>
+
+      <div className="space-y-4">
         {isLoading ? (
-           <div className="text-center py-10 text-slate-400">Loading history...</div>
+          <div className="text-center text-slate-400">Loading...</div>
         ) : entries.length === 0 ? (
-           <div className="text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
-             No entries yet. Start writing above!
-           </div>
+          <div className="text-center text-slate-400">No entries yet 🌸</div>
         ) : (
           entries.map((entry) => (
-            <div key={entry.id} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-              <div className="flex justify-between items-start mb-3">
-                <div className="flex items-center gap-2 text-xs text-slate-400">
+            <div
+              key={entry.id}
+              className="bg-white/80 backdrop-blur p-6 rounded-2xl border border-slate-100 shadow-lg transition hover:shadow-2xl"
+            >
+              <div className="flex justify-between mb-3 text-xs text-slate-400">
+                <span className="flex items-center gap-1">
                   <CalendarIcon size={14} />
-                  {new Date(entry.created_at).toLocaleDateString()} • {new Date(entry.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                   entry.mood_sentiment === 'Positive' || entry.mood_sentiment === 'Happy' ? 'bg-green-100 text-green-700' :
-                   entry.mood_sentiment === 'Anxious' || entry.mood_sentiment === 'Stressed' ? 'bg-orange-100 text-orange-700' :
-                   'bg-blue-100 text-blue-700'
-                }`}>
+                  {new Date(entry.created_at).toLocaleDateString()}
+                </span>
+                <span className="font-semibold text-purple-600">
                   {entry.mood_sentiment}
                 </span>
               </div>
-              <p className="text-slate-700 mb-4 whitespace-pre-wrap">{entry.content}</p>
-              
+
+              <p className="text-slate-700 mb-4 whitespace-pre-wrap">
+                {entry.content}
+              </p>
+
               {entry.ai_suggestion && (
-                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl flex gap-3 items-start">
-                   <Sparkles size={18} className="text-purple-500 mt-1 shrink-0" />
-                   <div>
-                     <p className="text-xs font-bold text-purple-700 uppercase mb-1">AI Insight</p>
-                     <p className="text-sm text-slate-600 italic">"{entry.ai_suggestion}"</p>
-                   </div>
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl flex gap-3">
+                  <Sparkles size={18} className="text-purple-500 mt-1" />
+                  <p className="text-sm text-slate-600 italic">
+                    "{entry.ai_suggestion}"
+                  </p>
                 </div>
               )}
             </div>
           ))
         )}
       </div>
+
     </div>
   );
 };
+
 export default Journal;
