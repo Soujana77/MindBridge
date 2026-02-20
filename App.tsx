@@ -59,11 +59,13 @@ const AppContent = () => {
       {activePage !== "AUTH" && activePage !== "SIGNUP" && <Sidebar />}
 
       {/* Main Content */}
-      <main className={`flex-1 p-6 ${
-        activePage !== "AUTH" && activePage !== "SIGNUP"
-          ? "md:ml-64"
-          : ""
-      }`}>
+      <main
+  className={`flex-1 p-6 overflow-y-auto h-screen pb-24 ${
+    activePage !== "AUTH" && activePage !== "SIGNUP"
+      ? "md:ml-64"
+      : ""
+  }`}
+>
         {renderPage()}
       </main>
 
