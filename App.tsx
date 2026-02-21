@@ -72,8 +72,8 @@ const AppContent = () => {
       {/* Main Content */}
       <main
         className={`flex-1 overflow-y-auto h-screen ${!["AUTH", "SIGNUP", "LANDING"].includes(activePage)
-            ? "md:ml-64 p-6 pb-24"
-            : ""
+          ? `md:ml-64 p-6 ${activePage === 'CHATBOT' ? 'pb-2' : 'pb-24'}`
+          : ""
           }`}
       >
         {renderPage()}

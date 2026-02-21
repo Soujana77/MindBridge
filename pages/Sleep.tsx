@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { supabase } from "../src/lib/supabase";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "../services/supabaseClient";
 import { useApp } from "../context/AppContext";
 
 /* ================= ANIMATION VARIANTS ================= */
@@ -132,40 +132,58 @@ const Sleep = () => {
       return;
     }
 
-    const normalized = Math.min(hours, 9);
-    const sleepScore = Math.round((normalized / 9) * 100);
-
-    let msg = "You need more rest.";
+    let sleepScore = 0;
+    let msg = "";
     let xp = 10;
 
-    if (sleepScore >= 85) {
-      msg = "Perfect sleep! Your body will thank you.";
+    if (hours >= 7 && hours <= 9) {
+      // Optimal range
+      sleepScore = 100;
+      msg = "Perfect sleep! Your body and mind are well-rested. ✨";
       xp = 30;
-    } else if (sleepScore >= 65) {
-      msg = "Decent sleep. Try to be more consistent.";
+    } else if (hours > 9) {
+      // Oversleeping penalty
+      sleepScore = Math.max(30, Math.round(100 - (hours - 9) * 15));
+      msg = "You overslept! While it feels good, too much sleep can cause grogginess and low energy.";
+      xp = 15;
+    } else if (hours >= 5) {
+      // Slightly under
+      sleepScore = Math.round((hours / 7) * 90);
+      msg = "Decent sleep, but a bit short. Aim for 7-9 hours for peak focus.";
       xp = 20;
+    } else {
+      // Very under
+      sleepScore = Math.round((hours / 7) * 100);
+      msg = "You need more rest. Lack of sleep can impact your mood and memory.";
+      xp = 10;
     }
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) return;
-
-    await supabase.from("sleep_logs").insert([
-      {
-        user_id: user.id,
-        sleep_hours: hours,
-        sleep_score: sleepScore,
-      },
-    ]);
-
+    // ✅ UPDATE UI IMMEDIATELY (Responsiveness)
     setScore(sleepScore);
     setFeedback(msg);
     addXP(xp);
-    addNotification("Sleep logged successfully 🌙");
+    addNotification("Sleep analyzed successfully 🌙");
 
-    fetchSleepData();
+    // THEN do Supabase work (if available)
+    if (!supabase) return;
+
+    try {
+      const { data } = await supabase.auth.getUser();
+      const user = data?.user;
+
+      if (user) {
+        await supabase.from("sleep_logs").insert([
+          {
+            user_id: user.id,
+            sleep_hours: hours,
+            sleep_score: sleepScore,
+          },
+        ]);
+        fetchSleepData();
+      }
+    } catch (err) {
+      console.warn("Supabase background sync failed", err);
+    }
   };
 
   return (
@@ -224,17 +242,32 @@ const Sleep = () => {
       </motion.div>
 
       {/* SCORE CARD */}
-      {score !== null && (
-        <motion.div
-          variants={item}
-          className="bg-gradient-to-r from-violet-500 to-fuchsia-600
-                     text-white p-6 rounded-3xl shadow-lg"
-        >
-          <h2 className="font-semibold text-lg">Sleep Score</h2>
-          <p className="text-4xl font-bold mt-2">{score}%</p>
-          <p className="text-violet-50 mt-2">{feedback}</p>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {score !== null && (
+          <motion.div
+            key="score-card"
+            variants={item}
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+            className="bg-gradient-to-r from-violet-500 to-fuchsia-600
+                       text-white p-8 rounded-[32px] shadow-xl shadow-violet-200/50"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <h2 className="font-bold text-xl text-violet-50 opacity-90">Analysis Result</h2>
+                <p className="text-5xl font-black mt-3 tracking-tight">{score}%</p>
+                <p className="text-violet-50/90 font-medium mt-4 text-lg leading-relaxed max-w-md">
+                  {feedback}
+                </p>
+              </div>
+              <div className="bg-white/20 p-4 rounded-3xl backdrop-blur-md">
+                <span className="text-3xl">✨</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ANALYTICS */}
       <motion.div variants={item} className="mt-8 space-y-4">
