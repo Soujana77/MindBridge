@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { useApp } from "../context/AppContext";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, Maximize, Minimize, X } from "lucide-react";
 
 type Phase = "Inhale" | "Hold" | "Exhale";
 
@@ -14,7 +15,9 @@ const Breathing = () => {
   const [cycleSecond, setCycleSecond] = useState(0); // 0 → 6
   const [phase, setPhase] = useState<Phase>("Inhale");
   const [lastPhase, setLastPhase] = useState<Phase>("Inhale");
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const progress = (TOTAL_TIME - timeLeft) / TOTAL_TIME;
@@ -81,103 +84,143 @@ const Breathing = () => {
     }
   }, [cycleSecond, lastPhase]);
 
+  // 🖥 FULLSCREEN
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+
   return (
     <div
-      className="absolute inset-0 z-50
-      bg-[linear-gradient(270deg,#2e1065,#6b21a8,#a855f7,#581c87,#2e1065)]
-      bg-[length:600%_600%] animate-[gradientMove_20s_ease_infinite]
-      flex flex-col items-center justify-center text-white overflow-hidden"
+      ref={containerRef}
+      className="min-h-screen flex flex-col items-center justify-center
+      bg-gradient-to-br from-slate-900 via-violet-950 to-slate-900
+      text-white p-6 relative rounded-[32px] overflow-hidden"
     >
       {/* 🌌 Star background */}
-      <div className="absolute inset-0">
-        {Array.from({ length: 100 }).map((_, i) => (
-          <div
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        {Array.from({ length: 40 }).map((_, i) => (
+          <motion.div
             key={i}
-            className="absolute bg-white rounded-full opacity-70 animate-pulse"
+            className="absolute bg-white rounded-full opacity-30"
+            animate={isActive ? {
+              x: [0, Math.random() * 100 - 50, Math.random() * 50 - 25, 0],
+              y: [0, Math.random() * 100 - 50, Math.random() * 50 - 25, 0],
+              opacity: [0.2, 0.5, 0.2],
+            } : {}}
+            transition={{
+              duration: Math.random() * 15 + 15,
+              repeat: Infinity,
+              ease: "linear",
+            }}
             style={{
-              width: Math.random() * 3 + "px",
-              height: Math.random() * 3 + "px",
+              width: Math.random() * 2 + 1 + "px",
+              height: Math.random() * 2 + 1 + "px",
               top: Math.random() * 100 + "%",
               left: Math.random() * 100 + "%",
-              animationDuration: Math.random() * 3 + 2 + "s",
             }}
           />
         ))}
       </div>
 
-      {/* ❌ Close */}
+      {/* 🖥 FULLSCREEN BUTTON */}
+      <button
+        onClick={toggleFullscreen}
+        className="absolute top-6 right-6 bg-white/20 p-3 rounded-full hover:bg-white/30 transition-colors z-20"
+      >
+        {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+      </button>
+
+      {/* ❌ CLOSE BUTTON - matches Pomodoro style if needed, but here to allow dashboard exit */}
       <button
         onClick={() => setActivePage("DASHBOARD")}
-        className="absolute top-6 right-6 p-2 bg-white/20 rounded-full backdrop-blur-md z-10"
+        className="absolute top-6 left-6 bg-white/20 p-3 rounded-full hover:bg-white/30 transition-colors z-20"
       >
-        ✕
+        <X size={20} />
       </button>
+
+      <h1 className="text-3xl font-bold mb-12 z-10">
+        Breath Companion
+      </h1>
 
       {/* 🧘 Phase */}
       <div className="mb-12 text-center z-10">
-        <h2 className="text-5xl font-light tracking-widest">{phase}</h2>
-        <p className="opacity-80 mt-2">{timeLeft}s remaining</p>
+        <h2 className="text-6xl font-extrabold tracking-[0.2em] uppercase bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+          {phase}
+        </h2>
+        <p className="text-indigo-200 mt-4 font-medium tracking-wide">
+          {timeLeft}s remaining
+        </p>
       </div>
 
       {/* 🟣 Progress + Orb */}
       <div className="relative z-10">
-        <svg width="320" height="320" className="absolute -top-8 -left-8">
+        <svg width="340" height="340" className="absolute -top-10 -left-10">
           <circle
-            cx="160"
-            cy="160"
-            r="140"
-            stroke="rgba(255,255,255,0.2)"
-            strokeWidth="6"
+            cx="170"
+            cy="170"
+            r="150"
+            stroke="rgba(255,255,255,0.1)"
+            strokeWidth="8"
             fill="none"
           />
           <circle
-            cx="160"
-            cy="160"
-            r="140"
+            cx="170"
+            cy="170"
+            r="150"
             stroke="white"
-            strokeWidth="6"
+            strokeWidth="8"
             fill="none"
-            strokeDasharray={2 * Math.PI * 140}
-            strokeDashoffset={(1 - progress) * 2 * Math.PI * 140}
+            strokeDasharray={2 * Math.PI * 150}
+            strokeDashoffset={(1 - progress) * 2 * Math.PI * 150}
             style={{ transition: "stroke-dashoffset 1s linear" }}
           />
         </svg>
 
         <div
-          className={`w-64 h-64 bg-white/20 backdrop-blur-xl rounded-full
-          border border-white/40 flex items-center justify-center shadow-2xl
-          transition-all
-          ${
-            phase === "Inhale"
-              ? "scale-125 duration-[3000ms]"
+          className={`w-64 h-64 bg-white/15 backdrop-blur-2xl rounded-full
+          border border-white/30 flex items-center justify-center shadow-[0_0_80px_rgba(255,255,255,0.2)]
+          transition-all duration-[3000ms] ease-in-out
+          ${phase === "Inhale"
+              ? "scale-[1.3] shadow-[0_0_120px_rgba(255,255,255,0.3)]"
               : phase === "Hold"
-              ? "scale-110 duration-[1000ms]"
-              : "scale-75 duration-[3000ms]"
-          }`}
+                ? "scale-[1.15]"
+                : "scale-[0.8] opacity-60"
+            }`}
         >
-          <div className="w-6 h-6 bg-white rounded-full animate-pulse" />
+          <div className="w-10 h-10 bg-white rounded-full blur-[1px] shadow-[0_0_20px_white]" />
         </div>
       </div>
 
       {/* ▶ Controls */}
-      <div className="mt-16 z-10">
+      <div className="mt-20 z-10">
         <button
           onClick={() => setIsActive(!isActive)}
-          className="bg-white/90 text-indigo-700 px-10 py-4 rounded-full
-          font-bold text-lg flex items-center gap-3 shadow-2xl
-          hover:scale-110 transition"
+          className="bg-white text-indigo-900 px-12 py-4 rounded-2xl
+          font-black text-lg flex items-center gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.3)]
+          hover:scale-105 active:scale-95 transition-all duration-300"
         >
           {isActive ? (
             <>
-              <Pause size={22} /> Pause
+              <Pause size={24} fill="currentColor" /> PAUSE
             </>
           ) : (
             <>
-              <Play size={22} /> Start
+              <Play size={24} fill="currentColor" /> START
             </>
           )}
         </button>
       </div>
+
+      {/* 📜 QUOTE - matches Pomodoro footer style */}
+      <p className="absolute bottom-8 text-white/40 text-sm italic font-medium tracking-wide z-10">
+        "Just breathe. You are exactly where you need to be."
+      </p>
     </div>
   );
 };

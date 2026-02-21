@@ -65,7 +65,7 @@ const AppContent = () => {
     <div className="flex min-h-screen bg-slate-50">
 
       {/* Sidebar */}
-      {!["AUTH", "SIGNUP", "BREATHE", "LANDING"].includes(activePage) && (
+      {!["AUTH", "SIGNUP", "LANDING"].includes(activePage) && (
         <Sidebar />
       )}
 
@@ -80,7 +80,7 @@ const AppContent = () => {
       </main>
 
       {/* 🌟 FLOATING MINI TIMER — GLOBAL */}
-      {!["AUTH", "SIGNUP", "BREATHE", "LANDING"].includes(activePage) && (
+      {!["AUTH", "SIGNUP", "LANDING"].includes(activePage) && (
         <FloatingTimer />
       )}
 
