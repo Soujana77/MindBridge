@@ -1,21 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useApp } from '../context/AppContext';
-import { X, Play, Pause } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { useApp } from "../context/AppContext";
+import { Play, Pause } from "lucide-react";
+
+type Phase = "Inhale" | "Hold" | "Exhale";
 
 const Breathing = () => {
   const { setActivePage, addXP } = useApp();
 
-  const [isActive, setIsActive] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [phase, setPhase] = useState<'Inhale' | 'Hold' | 'Exhale'>('Inhale');
-  const [lastPhase, setLastPhase] = useState("");
+  const TOTAL_TIME = 60;
 
-  const totalTime = 60;
-  const progress = (totalTime - timeLeft) / totalTime;
+  const [isActive, setIsActive] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
+  const [cycleSecond, setCycleSecond] = useState(0); // 0 → 6
+  const [phase, setPhase] = useState<Phase>("Inhale");
+  const [lastPhase, setLastPhase] = useState<Phase>("Inhale");
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // 🎵 Ambient sound
+  const progress = (TOTAL_TIME - timeLeft) / TOTAL_TIME;
+
+  /* 🎵 Ambient sound */
   useEffect(() => {
     audioRef.current = new Audio(
       "https://cdn.pixabay.com/download/audio/2022/03/15/audio_1f1c6e4b4e.mp3"
@@ -23,7 +27,7 @@ const Breathing = () => {
     audioRef.current.loop = true;
   }, []);
 
-  // 🔊 Voice guidance
+  /* 🔊 Voice guidance */
   const speak = (text: string) => {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
@@ -32,64 +36,58 @@ const Breathing = () => {
     speechSynthesis.speak(u);
   };
 
-  // 💗 Haptic vibration
+  /* 💗 Haptic */
   const vibrate = () => {
-    if (navigator.vibrate) navigator.vibrate(200);
+    if (navigator.vibrate) navigator.vibrate(150);
   };
 
-  // 🌬️ Breathing logic
+  /* 🌬️ TIMER ENGINE (1s REAL TIME) */
   useEffect(() => {
-  let interval: any;
+    let interval: any;
 
-  if (isActive && timeLeft > 0) {
-    audioRef.current?.play();
+    if (isActive && timeLeft > 0) {
+      audioRef.current?.play();
 
-    interval = setInterval(() => {
-      setTimeLeft(t => t - 1);
+      interval = setInterval(() => {
+        setTimeLeft((t) => t - 1);
+        setCycleSecond((c) => (c + 1) % 7); // 7-second cycle
+      }, 1000);
+    } else {
+      audioRef.current?.pause();
+    }
 
-      const cycle = timeLeft % 14;
-      // ⭐ Speak only when phase changes
-      if (cycle > 10 && lastPhase !== "Inhale") {
-  setPhase("Inhale");
-  speak("Inhale");
-  vibrate();
-  setLastPhase("Inhale");
-}
-else if (cycle > 6 && lastPhase !== "Hold") {
-  setPhase("Hold");
-  speak("Hold");
-  vibrate();
-  setLastPhase("Hold");
-}
-else if (lastPhase !== "Exhale") {
-  setPhase("Exhale");
-  speak("Exhale");
-  vibrate();
-  setLastPhase("Exhale");
-}
+    if (timeLeft === 0) {
+      setIsActive(false);
+      addXP(50);
+      speechSynthesis.cancel();
+    }
 
+    return () => clearInterval(interval);
+  }, [isActive, timeLeft, addXP]);
 
-    }, 2000);
+  /* 🧘 PHASE RESOLUTION */
+  useEffect(() => {
+    let newPhase: Phase;
 
-  } else {
-    audioRef.current?.pause();
-  }
+    if (cycleSecond <= 2) newPhase = "Inhale"; // 3s
+    else if (cycleSecond === 3) newPhase = "Hold"; // 1s
+    else newPhase = "Exhale"; // 3s
 
-  if (timeLeft === 0) {
-    setIsActive(false);
-    addXP(50);
-  }
-
-  return () => clearInterval(interval);
-
-}, [isActive, timeLeft, lastPhase, addXP]);
+    if (newPhase !== lastPhase) {
+      setPhase(newPhase);
+      speak(newPhase);
+      vibrate();
+      setLastPhase(newPhase);
+    }
+  }, [cycleSecond, lastPhase]);
 
   return (
-    <div className="absolute inset-0 z-50 
-    bg-[linear-gradient(270deg,#2e1065,#6b21a8,#a855f7,#581c87,#2e1065)]
-    bg-[length:600%_600%] animate-[gradientMove_20s_ease_infinite] 
-    flex flex-col items-center justify-center text-white overflow-hidden">
-
+    <div
+      className="absolute inset-0 z-50
+      bg-[linear-gradient(270deg,#2e1065,#6b21a8,#a855f7,#581c87,#2e1065)]
+      bg-[length:600%_600%] animate-[gradientMove_20s_ease_infinite]
+      flex flex-col items-center justify-center text-white overflow-hidden"
+    >
       {/* 🌌 Star background */}
       <div className="absolute inset-0">
         {Array.from({ length: 100 }).map((_, i) => (
@@ -101,7 +99,7 @@ else if (lastPhase !== "Exhale") {
               height: Math.random() * 3 + "px",
               top: Math.random() * 100 + "%",
               left: Math.random() * 100 + "%",
-              animationDuration: Math.random() * 3 + 2 + "s"
+              animationDuration: Math.random() * 3 + 2 + "s",
             }}
           />
         ))}
@@ -109,23 +107,20 @@ else if (lastPhase !== "Exhale") {
 
       {/* ❌ Close */}
       <button
-        onClick={() => setActivePage('DASHBOARD')}
+        onClick={() => setActivePage("DASHBOARD")}
         className="absolute top-6 right-6 p-2 bg-white/20 rounded-full backdrop-blur-md z-10"
       >
-        <X size={24} />
+        ✕
       </button>
 
-
-      {/* 🧘 Phase text */}
+      {/* 🧘 Phase */}
       <div className="mb-12 text-center z-10">
         <h2 className="text-5xl font-light tracking-widest">{phase}</h2>
         <p className="opacity-80 mt-2">{timeLeft}s remaining</p>
       </div>
 
-      {/* 🟣 PROGRESS RING + ORB */}
+      {/* 🟣 Progress + Orb */}
       <div className="relative z-10">
-
-        {/* Progress Ring SVG */}
         <svg width="320" height="320" className="absolute -top-8 -left-8">
           <circle
             cx="160"
@@ -148,30 +143,43 @@ else if (lastPhase !== "Exhale") {
           />
         </svg>
 
-        {/* Breathing Orb */}
         <div
-          className={`w-64 h-64 bg-white/20 backdrop-blur-xl rounded-full border border-white/40 
-          flex items-center justify-center shadow-2xl transition-all duration-[4000ms]
-          ${phase === 'Inhale' ? 'scale-125' : phase === 'Exhale' ? 'scale-75' : 'scale-100'}`}
+          className={`w-64 h-64 bg-white/20 backdrop-blur-xl rounded-full
+          border border-white/40 flex items-center justify-center shadow-2xl
+          transition-all
+          ${
+            phase === "Inhale"
+              ? "scale-125 duration-[3000ms]"
+              : phase === "Hold"
+              ? "scale-110 duration-[1000ms]"
+              : "scale-75 duration-[3000ms]"
+          }`}
         >
-          <div className="w-6 h-6 bg-white rounded-full animate-pulse"></div>
+          <div className="w-6 h-6 bg-white rounded-full animate-pulse" />
         </div>
-
       </div>
 
       {/* ▶ Controls */}
       <div className="mt-16 z-10">
         <button
           onClick={() => setIsActive(!isActive)}
-          className="bg-white/90 text-indigo-700 px-10 py-4 rounded-full font-bold text-lg flex items-center gap-3 shadow-2xl hover:scale-110 transition"
+          className="bg-white/90 text-indigo-700 px-10 py-4 rounded-full
+          font-bold text-lg flex items-center gap-3 shadow-2xl
+          hover:scale-110 transition"
         >
-          {isActive
-            ? <><Pause size={22} /> Pause</>
-            : <><Play size={22} /> Start</>}
+          {isActive ? (
+            <>
+              <Pause size={22} /> Pause
+            </>
+          ) : (
+            <>
+              <Play size={22} /> Start
+            </>
+          )}
         </button>
       </div>
-
     </div>
   );
 };
+
 export default Breathing;

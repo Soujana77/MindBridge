@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import GameLayout from "../../components/games/GameLayout";
-import { playPop } from "../../lib/sounds";
+import { playPop } from "../../src/lib/sounds";
 
 interface Particle {
   id: number;

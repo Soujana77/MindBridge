@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import GameLayout from "../../components/games/GameLayout";
 import { RotateCcw } from "lucide-react";
-import { playClick, playWrong, playSuccess } from "../../lib/sounds";
+import { playClick, playWrong, playSuccess } from "../../src/lib/sounds";
 
 function generateNumbers(count: number): number[] {
   const nums: number[] = [];

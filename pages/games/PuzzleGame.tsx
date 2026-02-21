@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import GameLayout from "../../components/games/GameLayout";
 import { RotateCcw } from "lucide-react";
-import { playClick, playSuccess, playChime } from "../../lib/sounds";
+import { playClick, playSuccess, playChime } from "../../src/lib/sounds";
 
 const emojis = ["🌸", "🌊", "🌿", "🦋", "🌙", "✨", "🌈", "🍃"];
 

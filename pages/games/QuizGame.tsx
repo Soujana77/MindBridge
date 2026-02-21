@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import GameLayout from "../../components/games/GameLayout";
 import { CheckCircle2, XCircle, ArrowRight } from "lucide-react";
-import { playSuccess, playWrong, playClick } from "../../lib/sounds";
+import { playSuccess, playWrong, playClick } from "../../src/lib/sounds";
 
 const questions = [
   { q: "What is the happiest animal on Earth?", options: ["Dolphin", "Quokka", "Golden Retriever", "Penguin"], answer: 1 },
