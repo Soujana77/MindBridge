@@ -29,14 +29,13 @@ const NavItem = ({ page, icon: Icon, label }: NavItemProps) => {
   return (
     <button
       onClick={() => setActivePage(page)}
-      className={`flex items-center gap-3 p-3 rounded-xl transition ${
-        isActive
-          ? "bg-indigo-500 text-white"
-          : "text-slate-500 hover:bg-slate-100"
-      }`}
+      className={`flex items-center w-full text-left gap-3 p-3 rounded-xl transition-all duration-300 ${isActive
+        ? "bg-violet-600 text-white shadow-lg shadow-violet-100"
+        : "text-slate-500 hover:bg-violet-50 hover:text-violet-600"
+        }`}
     >
-      <Icon size={22} />
-      {label}
+      <Icon size={22} className="flex-shrink-0" />
+      <span className="leading-tight">{label}</span>
     </button>
   );
 };
@@ -68,29 +67,29 @@ export const Sidebar = () => {
 
       {/* PROFILE */}
       <div
-  onClick={() => setActivePage("PROFILE")}
-  className="cursor-pointer mt-6 flex items-center gap-3 p-3 rounded-xl bg-white shadow-sm border border-slate-100 hover:shadow-md transition"
->
-  {/* Avatar */}
-  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-emerald-400 flex items-center justify-center text-white font-bold">
-    {(user.name || "U")[0]}
-  </div>
+        onClick={() => setActivePage("PROFILE")}
+        className="cursor-pointer mt-6 flex items-center gap-3 p-3 rounded-xl bg-white shadow-sm border border-slate-100 hover:shadow-md transition"
+      >
+        {/* Avatar */}
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-emerald-400 flex items-center justify-center text-white font-bold">
+          {(user.name || "U")[0]}
+        </div>
 
-  {/* Name */}
-  <p className="font-semibold text-slate-700">
-    {user.name || "User"}
-  </p>
-</div>
+        {/* Name */}
+        <p className="font-semibold text-slate-700">
+          {user.name || "User"}
+        </p>
+      </div>
 
 
       {/* LOGOUT */}
       <button
-  onClick={handleLogout}
-  className="mt-4 flex items-center gap-2 text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition"
->
-  <LogOut size={18} />
-  Logout
-</button>
+        onClick={handleLogout}
+        className="mt-4 flex items-center gap-2 text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition"
+      >
+        <LogOut size={18} />
+        Logout
+      </button>
 
     </div>
   );

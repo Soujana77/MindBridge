@@ -24,7 +24,8 @@ export type PageView =
   | "SLEEP"
   | "PEER"
   | "COUNSELING"
-  | "GAMES";
+  | "GAMES"
+  | "LANDING";
 
 export interface Achievement {
   id: string;
@@ -107,8 +108,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const [user, setUser] = useState<User>(defaultUser);
 
-  // ⭐ Start app at login page
-  const [activePage, setActivePage] = useState<PageView>('AUTH');
+  // ⭐ Start app at landing page
+  const [activePage, setActivePage] = useState<PageView>('LANDING');
 
   const [achievements, setAchievements] = useState<Achievement[]>(INITIAL_ACHIEVEMENTS);
   const [notifications, setNotifications] = useState<string[]>([]);

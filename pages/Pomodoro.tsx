@@ -134,8 +134,8 @@ const Pomodoro = () => {
     <div
       ref={containerRef}
       className="min-h-screen flex flex-col items-center justify-center
-      bg-gradient-to-br from-indigo-900 via-purple-800 to-indigo-900
-      text-white p-6 relative"
+      bg-gradient-to-br from-slate-900 via-violet-950 to-slate-900
+      text-white p-6 relative rounded-[32px] overflow-hidden"
     >
       {/* 🖥 FULLSCREEN BUTTON */}
       <button
@@ -150,45 +150,45 @@ const Pomodoro = () => {
       </h1>
 
       {/* ⭕ PROGRESS RING TIMER */}
-<div className="relative mb-8">
+      <div className="relative mb-8">
 
-  <svg width="300" height="300">
-    {/* Background circle */}
-    <circle
-      cx="150"
-      cy="150"
-      r="130"
-      stroke="rgba(255,255,255,0.2)"
-      strokeWidth="10"
-      fill="none"
-    />
+        <svg width="300" height="300">
+          {/* Background circle */}
+          <circle
+            cx="150"
+            cy="150"
+            r="130"
+            stroke="rgba(255,255,255,0.2)"
+            strokeWidth="10"
+            fill="none"
+          />
 
-    {/* Progress circle */}
-    <circle
-      cx="150"
-      cy="150"
-      r="130"
-      stroke="white"
-      strokeWidth="10"
-      fill="none"
-      strokeDasharray={2 * Math.PI * 130}
-      strokeDashoffset={(1 - progress) * 2 * Math.PI * 130}
-      style={{ transition: "stroke-dashoffset 1s linear" }}
-    />
-  </svg>
+          {/* Progress circle */}
+          <circle
+            cx="150"
+            cy="150"
+            r="130"
+            stroke="white"
+            strokeWidth="10"
+            fill="none"
+            strokeDasharray={2 * Math.PI * 130}
+            strokeDashoffset={(1 - progress) * 2 * Math.PI * 130}
+            style={{ transition: "stroke-dashoffset 1s linear" }}
+          />
+        </svg>
 
-  {/* TIME TEXT */}
-  <div className="absolute inset-0 flex flex-col items-center justify-center">
-    <div className="text-6xl font-mono font-bold">
-      {formatTime(timeLeft)}
-    </div>
-    <p className="opacity-70 mt-2">
-      {mode === "FOCUS"
-        ? "Deep Work Mode"
-        : "Relax & Recharge"}
-    </p>
-  </div>
-</div>
+        {/* TIME TEXT */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="text-6xl font-mono font-bold">
+            {formatTime(timeLeft)}
+          </div>
+          <p className="opacity-70 mt-2">
+            {mode === "FOCUS"
+              ? "Deep Work Mode"
+              : "Relax & Recharge"}
+          </p>
+        </div>
+      </div>
 
       <p className="opacity-70 mb-8">
         {mode === "FOCUS"

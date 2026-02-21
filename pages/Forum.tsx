@@ -122,7 +122,7 @@ const Forum = () => {
       {/* HEADER */}
       <motion.header variants={item} className="mb-6">
         <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-          <Users className="text-indigo-500" /> Peer Support Forum
+          <Users className="text-violet-500" /> Peer Support Forum
         </h2>
         <p className="text-slate-500">
           Anonymous support from your campus community.
@@ -141,11 +141,10 @@ const Forum = () => {
               whileHover={{ scale: 1.05 }}
               onClick={() => setSelectedTag(tag)}
               className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap
-              ${
-                selectedTag === tag
-                  ? "bg-indigo-500 text-white"
-                  : "bg-slate-100 text-slate-500 hover:bg-slate-200"
-              }`}
+              ${selectedTag === tag
+                  ? "bg-violet-600 text-white shadow-md"
+                  : "bg-slate-100 text-slate-500 hover:bg-violet-50 hover:text-violet-600"
+                }`}
             >
               {tag}
             </motion.button>
@@ -159,7 +158,7 @@ const Forum = () => {
             onChange={(e) => setNewPost(e.target.value)}
             placeholder={`Share something about ${selectedTag}... (Anonymous)`}
             className="flex-1 bg-slate-50 rounded-xl px-4 py-3
-            focus:ring-2 focus:ring-indigo-300 outline-none"
+            focus:ring-2 focus:ring-violet-200 outline-none"
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           />
 
@@ -168,7 +167,7 @@ const Forum = () => {
             whileTap={{ scale: 0.95 }}
             onClick={handleSubmit}
             disabled={submitting || !newPost.trim()}
-            className="bg-indigo-500 text-white p-3 rounded-xl disabled:opacity-50"
+            className="bg-violet-600 text-white p-3 rounded-xl disabled:opacity-50"
           >
             {submitting ? (
               <Loader2 className="animate-spin" size={20} />
@@ -199,9 +198,9 @@ const Forum = () => {
               <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center gap-2">
                   <div
-                    className="w-8 h-8 bg-gradient-to-br from-blue-100 to-indigo-100
+                    className="w-8 h-8 bg-gradient-to-br from-violet-100 to-fuchsia-100
                     rounded-full flex items-center justify-center
-                    text-indigo-500 text-xs font-bold"
+                    text-violet-600 text-xs font-bold"
                   >
                     {post.author_alias.charAt(0)}
                   </div>
@@ -245,7 +244,7 @@ const Forum = () => {
                   </span>
                 </motion.button>
 
-                <button className="flex items-center gap-1 text-slate-400 hover:text-indigo-500">
+                <button className="flex items-center gap-1 text-slate-400 hover:text-violet-600">
                   <MessageSquare size={18} />
                   <span className="text-sm font-semibold">Reply</span>
                 </button>

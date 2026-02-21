@@ -1,7 +1,8 @@
 import React from "react";
 import { AppProvider, useApp } from "./context/AppContext";
 import { Sidebar } from "./components/Navigation";
-import FloatingTimer from "./components/FloatingTimer"; 
+import FloatingTimer from "./components/FloatingTimer";
+import LandingPage from "./landing/LandingPage";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
@@ -22,6 +23,8 @@ const AppContent = () => {
 
   const renderPage = () => {
     switch (activePage) {
+      case "LANDING":
+        return <LandingPage onGetStarted={() => setActivePage("AUTH")} />;
       case "AUTH":
         return (
           <Auth
@@ -62,23 +65,22 @@ const AppContent = () => {
     <div className="flex min-h-screen bg-slate-50">
 
       {/* Sidebar */}
-      {!["AUTH", "SIGNUP", "BREATHE"].includes(activePage) && (
+      {!["AUTH", "SIGNUP", "BREATHE", "LANDING"].includes(activePage) && (
         <Sidebar />
       )}
 
       {/* Main Content */}
       <main
-        className={`flex-1 p-6 overflow-y-auto h-screen pb-24 ${
-          activePage !== "AUTH" && activePage !== "SIGNUP"
-            ? "md:ml-64"
+        className={`flex-1 overflow-y-auto h-screen ${!["AUTH", "SIGNUP", "LANDING"].includes(activePage)
+            ? "md:ml-64 p-6 pb-24"
             : ""
-        }`}
+          }`}
       >
         {renderPage()}
       </main>
 
       {/* 🌟 FLOATING MINI TIMER — GLOBAL */}
-      {!["AUTH", "SIGNUP", "BREATHE"].includes(activePage) && (
+      {!["AUTH", "SIGNUP", "BREATHE", "LANDING"].includes(activePage) && (
         <FloatingTimer />
       )}
 

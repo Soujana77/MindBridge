@@ -81,13 +81,13 @@ const Dashboard = () => {
       className="p-6 space-y-6 pb-24 md:pb-6 w-full"
     >
       {/* 🔔 Notifications */}
-      <div className="fixed top-6 right-6 space-y-2 z-50">
+      <div className="fixed top-6 right-6 space-y-3 z-50">
         {notifications.map((note, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-indigo-500 text-white px-4 py-3 rounded-xl shadow-lg"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-white border-l-4 border-violet-500 text-slate-700 px-6 py-4 rounded-2xl shadow-xl shadow-slate-200/50 backdrop-blur-xl"
           >
             {note}
           </motion.div>
@@ -97,14 +97,14 @@ const Dashboard = () => {
       {/* HEADER */}
       <motion.header variants={item} className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold text-slate-800">
+          <h2 className="text-4xl font-extrabold text-slate-800 tracking-tight">
             Hi, {user.name}
           </h2>
-          <p className="text-slate-500">Ready for a mindful day?</p>
+          <p className="text-slate-500 text-lg">Ready for a mindful day?</p>
         </div>
 
-        <div className="bg-white px-4 py-2 rounded-xl shadow-sm border flex items-center gap-2">
-          <span>🔥</span>
+        <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-3">
+          <span className="text-xl">🔥</span>
           <span className="font-bold text-slate-700">
             {streak} Day Streak
           </span>
@@ -112,25 +112,25 @@ const Dashboard = () => {
       </motion.header>
 
       {/* GRID */}
-      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* LEFT COLUMN */}
         <div className="space-y-6">
           {/* DAILY MOOD */}
           <motion.section
-            whileHover={{ scale: 1.02 }}
-            className="bg-white p-6 rounded-3xl shadow-sm border"
+            whileHover={{ scale: 1.01 }}
+            className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100"
           >
-            <h3 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
-              <Activity className="text-indigo-500" size={20} />
+            <h3 className="font-bold text-slate-700 mb-6 flex items-center gap-3">
+              <Activity className="text-violet-500" size={20} />
               Daily Mood Quest
             </h3>
 
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-between gap-3">
               {[1, 2, 3, 4, 5].map((level) => (
                 <button
                   key={level}
                   onClick={() => updateMood(level)}
-                  className="w-12 h-12 rounded-2xl bg-slate-50 hover:bg-indigo-100 text-xl flex items-center justify-center border"
+                  className="w-12 h-12 rounded-2xl bg-slate-50 hover:bg-violet-50 hover:text-violet-600 transition-all duration-300 text-xl flex items-center justify-center border border-slate-100"
                 >
                   {["😢", "😕", "😐", "🙂", "😄"][level - 1]}
                 </button>

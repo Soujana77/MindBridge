@@ -30,7 +30,7 @@ const Profile = () => {
 
   const [avatar, setAvatar] = useState(
     user.avatar ||
-      `https://api.dicebear.com/7.x/avataaars/svg?seed=default`
+    `https://api.dicebear.com/7.x/avataaars/svg?seed=default`
   );
 
   const [editMode, setEditMode] = useState(false);
@@ -51,7 +51,7 @@ const Profile = () => {
   useEffect(() => {
     setAvatar(
       user.avatar ||
-        `https://api.dicebear.com/7.x/avataaars/svg?seed=default`
+      `https://api.dicebear.com/7.x/avataaars/svg?seed=default`
     );
 
     setForm({
@@ -127,7 +127,7 @@ const Profile = () => {
       {/* HEADER */}
       <motion.div
         variants={item}
-        className="bg-gradient-to-r from-indigo-500 to-purple-600
+        className="bg-gradient-to-r from-violet-600 to-fuchsia-600
         text-white p-6 rounded-xl shadow-lg flex items-center gap-6"
       >
         <div className="flex flex-col items-center">
@@ -140,7 +140,7 @@ const Profile = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             onClick={generateAvatar}
-            className="bg-white text-indigo-600 px-3 py-1 rounded-lg mt-2 text-sm"
+            className="bg-white text-slate-900 px-3 py-1 rounded-lg mt-2 text-sm font-bold shadow-sm"
           >
             Generate Avatar
           </motion.button>
@@ -223,7 +223,7 @@ const Profile = () => {
       <motion.button
         whileHover={{ scale: 1.05 }}
         onClick={() => setEditMode(!editMode)}
-        className="bg-indigo-600 text-white px-4 py-2 rounded-lg"
+        className="bg-violet-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-violet-700 transition"
       >
         {editMode ? "Cancel Editing" : "Edit Profile"}
       </motion.button>
@@ -293,22 +293,22 @@ const ProfileCard = ({
     <motion.div
       variants={item}
       whileHover={{ scale: 1.02 }}
-      className="bg-white p-4 rounded-xl shadow-sm"
+      className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"
     >
-      <div className="text-sm text-slate-500 flex items-center gap-2">
-        {icon}
-        {label}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-slate-400">{icon}</span>
+        <label className="text-sm text-slate-500 font-semibold">{label}</label>
       </div>
 
       {editMode ? (
         <input
           name={name}
-          value={value}
+          value={value || ""}
           onChange={onChange}
-          className="border p-2 rounded w-full mt-2"
+          className="input-mindbridge border-2 border-slate-900"
         />
       ) : (
-        <div className="text-lg font-semibold mt-2 text-indigo-600">
+        <div className="text-lg font-bold text-slate-900 ml-1">
           {value || "Not set"}
         </div>
       )}

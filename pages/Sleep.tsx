@@ -49,7 +49,7 @@ const SleepChart = ({ data }: { data: { date: string; hours: number }[] }) => {
 
       <polyline
         fill="none"
-        stroke="#4f46e5"
+        stroke="#8b5cf6"
         strokeWidth="3"
         points={points.join(" ")}
       />
@@ -60,7 +60,7 @@ const SleepChart = ({ data }: { data: { date: string; hours: number }[] }) => {
           (i * (width - padding * 2)) / Math.max(data.length - 1, 1);
         const y =
           height - padding - (d.hours / maxHours) * (height - padding * 2);
-        return <circle key={i} cx={x} cy={y} r={5} fill="#4f46e5" />;
+        return <circle key={i} cx={x} cy={y} r={5} fill="#8b5cf6" />;
       })}
 
       {data.map((d, i) => {
@@ -208,15 +208,15 @@ const Sleep = () => {
             }
             placeholder="Enter hours"
             className="border border-slate-300 rounded-xl px-4 py-2 w-40
-                       focus:ring-4 focus:ring-indigo-200 focus:outline-none"
+                       focus:ring-4 focus:ring-violet-100 focus:outline-none"
           />
 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={calculateSleep}
-            className="bg-indigo-600 text-white px-6 py-2 rounded-xl
-                       font-medium shadow-lg"
+            className="bg-violet-600 text-white px-6 py-2 rounded-xl
+                       font-medium shadow-lg hover:bg-violet-700 transition"
           >
             Analyze
           </motion.button>
@@ -227,12 +227,12 @@ const Sleep = () => {
       {score !== null && (
         <motion.div
           variants={item}
-          className="bg-gradient-to-r from-indigo-500 to-indigo-600
+          className="bg-gradient-to-r from-violet-500 to-fuchsia-600
                      text-white p-6 rounded-3xl shadow-lg"
         >
           <h2 className="font-semibold text-lg">Sleep Score</h2>
           <p className="text-4xl font-bold mt-2">{score}%</p>
-          <p className="text-indigo-100 mt-2">{feedback}</p>
+          <p className="text-violet-50 mt-2">{feedback}</p>
         </motion.div>
       )}
 

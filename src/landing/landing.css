@@ -1,0 +1,252 @@
+/* AI Wellness Landing Page Styles */
+
+.landing-page-root {
+    --landing-bg-primary: #0f172a;
+    --landing-bg-secondary: #020617;
+    --landing-text-primary: #e5e7eb;
+    --landing-text-secondary: #94a3b8;
+    --landing-accent: #22d3ee;
+    --landing-error: #ef4444;
+    --landing-warning: #facc15;
+
+    --landing-font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+    --landing-radius-sm: 8px;
+    --landing-radius-md: 12px;
+
+    --landing-transition: all 0.3s ease;
+
+    background-color: var(--landing-bg-primary);
+    color: var(--landing-text-primary);
+    font-family: var(--landing-font-family);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+.landing-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.landing-section {
+    padding: 5rem 0;
+}
+
+.landing-flex {
+    display: flex;
+}
+
+.landing-grid {
+    display: grid;
+}
+
+.landing-items-center {
+    align-items: center;
+}
+
+.landing-justify-between {
+    justify-content: space-between;
+}
+
+.landing-text-center {
+    text-align: center;
+}
+
+/* Typography */
+.landing-h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--landing-text-primary);
+}
+
+.landing-h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: var(--landing-text-primary);
+}
+
+.landing-p {
+    font-size: 1.125rem;
+    color: var(--landing-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.landing-small {
+    font-size: 0.875rem;
+    color: var(--landing-text-secondary);
+}
+
+/* Buttons */
+.landing-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--landing-radius-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--landing-transition);
+    border: 1px solid transparent;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.landing-btn-primary {
+    background-color: var(--landing-accent);
+    color: var(--landing-bg-secondary);
+}
+
+.landing-btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.landing-btn-outline {
+    background-color: transparent;
+    border-color: var(--landing-text-secondary);
+    color: var(--landing-text-primary);
+}
+
+.landing-btn-outline:hover {
+    border-color: var(--landing-accent);
+    color: var(--landing-accent);
+}
+
+/* Navbar */
+.landing-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1.25rem 0;
+    background-color: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.landing-nav-links {
+    gap: 2rem;
+}
+
+.landing-nav-link {
+    color: var(--landing-text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--landing-transition);
+}
+
+.landing-nav-link:hover {
+    color: var(--landing-accent);
+}
+
+/* Sidebar for Mobile (optional/responsive) */
+@media (max-width: 768px) {
+    .landing-nav-links {
+        display: none;
+    }
+}
+
+/* Hero Section */
+.landing-hero {
+    padding: 8rem 0 6rem;
+    background: radial-gradient(circle at center, rgba(34, 211, 238, 0.05) 0%, transparent 70%);
+}
+
+.landing-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Features Section */
+.landing-features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.landing-feature-card {
+    padding: 2.5rem;
+    background-color: var(--landing-bg-secondary);
+    border-radius: var(--landing-radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--landing-transition);
+}
+
+.landing-feature-card:hover {
+    border-color: var(--landing-accent);
+    transform: translateY(-5px);
+}
+
+.landing-feature-icon {
+    width: 3rem;
+    height: 3rem;
+    color: var(--landing-accent);
+    margin-bottom: 1.5rem;
+}
+
+/* How It Works */
+.landing-hiw-steps {
+    gap: 4rem;
+    margin-top: 4rem;
+}
+
+.landing-hiw-step {
+    flex: 1;
+    position: relative;
+}
+
+.landing-hiw-number {
+    font-size: 3rem;
+    font-weight: 600;
+    color: rgba(34, 211, 238, 0.1);
+    position: absolute;
+    top: -1.5rem;
+    left: 0;
+}
+
+/* Testimonials */
+.landing-testimonials-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.landing-testimonial-card {
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: var(--landing-radius-md);
+    font-style: italic;
+}
+
+/* CTA Section */
+.landing-cta {
+    background-color: var(--landing-bg-secondary);
+    border-radius: var(--landing-radius-md);
+    padding: 4rem;
+    margin: 4rem 0;
+}
+
+/* Footer */
+.landing-footer {
+    padding: 4rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.landing-footer-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+}
+
+.landing-footer-link {
+    display: block;
+    color: var(--landing-text-secondary);
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    transition: var(--landing-transition);
+}
+
+.landing-footer-link:hover {
+    color: var(--landing-accent);
+}
