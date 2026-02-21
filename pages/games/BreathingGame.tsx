@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import GameLayout from "../../components/games/GameLayout";
-import { playBreathTone } from "../../lib/sounds";
+import { playBreathTone } from "../../src/lib/sounds";
 
 const INHALE_DURATION = 4000;
 const HOLD_DURATION = 4000;

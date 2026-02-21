@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import GameLayout from "../../components/games/GameLayout";
 import { Heart, RefreshCw } from "lucide-react";
-import { playChime } from "../../lib/sounds";
+import { playChime } from "../../src/lib/sounds";
 
 const affirmations = [
   "You are worthy of love and kindness. 💜",
